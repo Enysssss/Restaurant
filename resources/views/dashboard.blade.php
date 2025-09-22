@@ -9,51 +9,69 @@
           crossorigin="anonymous" />
 </head>
 <body class="bg-light">
+  @include('layouts.navbar') <!-- La navbar est incluse ici -->
 
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
-  <div class="container">
-    <a class="navbar-brand" href="#">
-      {{ Auth::user()->name }}
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">Accueil</a>
-        </li>
-      </ul>
-      <form class="d-flex me-3" role="search">
-        <input class="form-control me-2" type="search" placeholder="Rechercher" aria-label="Search" />
-        <button class="btn btn-outline-success" type="submit">Recherche</button>
-      </form>
-      <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit" class="btn btn-danger">Se déconnecter</button>
-      </form>
+<div class="container-fluid p-0">
+  <div class="d-flex">
+    <!-- Colonne gauche : boutons -->
+    <div class="d-flex flex-column p-2" style="min-width: 200px;">
+      @can('Create Dish')
+        <a href="{{ route('form_dish') }}" class="btn btn-primary btn-lg mb-3">
+          Créer un plat
+        </a>
+        <a href="{{ route('Users_list') }}" class="btn btn-primary btn-lg mb-3">
+          Liste Utilisateurs
+        </a>
+      @endcan
+
+      <a href="{{ route('list_dishes') }}" class="btn btn-outline-primary btn-lg mb-3">
+        Liste des plats
+      </a>
+
+      <a href="{{ route('My_Likes') }}" class="btn btn-outline-primary btn-lg mb-3">
+        Favoris
+      </a>
+
+      <a href="{{ route('liste_dishes_user') }}" class="btn btn-outline-primary btn-lg mb-3">
+        Mes Plats
+      </a>
+    </div>
+
+    <!-- Colonne droite : champs pour écrire des numéros -->
+    <div class="flex-grow-1 p-3">
+        <div class="row g-3">
+          <!-- Première ligne : 2 stats -->
+          <div class="col-md-6">
+            <div class="p-4 bg-white shadow rounded text-center">
+              <h5 class="fw-bold">Nombre TOTAL de Plats </h5>
+              <div class="display-4">{{ $NB_Dishes }}</div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="p-4 bg-white shadow rounded text-center">
+              <h5 class="fw-bold">Nombre d'Utilisateurs</h5>
+              <div class="display-4">{{ $NB_client }}</div>
+            </div>
+          </div>
+
+          <!-- Deuxième ligne : 2 autres stats -->
+          <div class="col-md-6">
+            <div class="p-4 bg-white shadow rounded text-center">
+              <h5 class="fw-bold">Nombre de vos plats</h5>
+              <div class="display-4">X</div>
+            </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="p-4 bg-white shadow rounded text-center">
+        <h5 class="fw-bold">Nombre de like sur vos plats</h5>
+        <div class="display-4">X</div>
+      </div>
     </div>
   </div>
-</nav>
+</div>
 
-<div class="container">
-  <div class="d-flex gap-3 justify-content-center">
-    <ul>
-    <a href="{{ route('form_dish') }}" class="btn btn-primary btn-lg">
-      Créer un plat
-    </a>
-    <a href="{{ route('list_dishes') }}" class="btn btn-outline-primary btn-lg">
-      Liste des plats
-    </a>
-    <a href="{{ route('My_Likes') }}" class="btn btn-outline-primary btn-lg">
-      Favories
-    </a>
-    <a href="{{ route('liste_dishes_user') }}" class="btn btn-outline-primary btn-lg">
-      Mes Plats
-    </a>
-  </ul>
   </div>
 </div>
 
