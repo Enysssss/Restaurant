@@ -19,13 +19,14 @@
         }
     </style>
 </head>
+@include('layouts.navbar')
 <body class="bg-light">
 
 <div class="container py-5">
-    <h1 class="text-center mb-5">🍽️ Liste des Plats que vous avez créé !</h1>
+    <h1 class="text-center mb-5">🍽️ Liste des Plats que vous avez créés !</h1>
 
     <div class="row g-4">
-        @foreach ($plats as $plat)
+        @forelse ($plats as $plat)
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 shadow-sm">
                     <img 
@@ -34,39 +35,45 @@
                         alt="Image du plat" 
                         style="height: 250px; object-fit: cover;"
                     >
-                    <div class="card-body">
-                        <h5 class="card-title d-flex justify-content-between align-items-center">
-                            {{ $plat->name }}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ $plat->name }}</h5>
+                        <p class="card-text">{{ $plat->descriptionXX }}</p>
 
-                            <form action="{{ route("delete_dish", $plat->id) }}" method="POST" onsubmit="return confirm('Supprimer ce plat ?')">
+                        <div class="mt-auto d-flex justify-content-between">
+                            <!-- Bouton Supprimer -->
+                            <form action="{{ route('delete_dish', $plat->id) }}" method="POST" onsubmit="return confirm('Supprimer ce plat ?')" class="me-2">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit">Supprimer</button>
+                                <button type="submit" class="btn btn-danger btn-sm w-100">
+                                    🗑️ Supprimer
+                                </button>
                             </form>
-                                      
-                                     
-                            <form action="{{ route('edit', $plat->id) }}" method="POST" >
-                                @csrf
-                                @method('GET')
 
-                                <button type="submit">EDIT</button>
+                            <!-- Bouton Edit -->
+                            <form action="{{ route('edit', $plat->id) }}" method="GET">
+                                @csrf
+                                <button type="submit" class="btn btn-warning btn-sm w-100">
+                                    ✏️ Edit
+                                </button>
                             </form>  
-                        </h5>
-                        <p class="card-text">{{ $plat->descriptionXX }}</p>
+                        </div>
                     </div>
                 </div>
-                </div>
-            @endforeach
-                       
-
-            @if ($plats->isEmpty())
-                <div class="empty-message">
-                    PLUS A MANGER VA A MCDO C BON MMMMM
-                </div>
-            @endif
-
-        </div>
+            </div>
+        @empty
+            <div class="col-12 text-center text-muted">
+                <h4>Aucun plat créé pour le moment.</h4>
+                <p>Va créer ton premier plat ! 🍔🍟</p>
+            </div>
+        @endforelse
     </div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center mt-4">
+        {{ $plats->links('pagination::bootstrap-5') }}
+    </div>
+</div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>

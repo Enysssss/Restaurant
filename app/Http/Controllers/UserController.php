@@ -85,7 +85,7 @@ class UserController extends Controller
     public function myLikes()
     {
         $UserNow = Auth::user();
-        $user = User::find($UserNow->id); 
+        $user = User::find($UserNow->id);
         $dishes = $user->dishes()->get();
 
         return view('liked_dishes', compact('dishes'));
@@ -113,5 +113,28 @@ class UserController extends Controller
 
         return redirect()->route('liste_dishes_user')->with('success', 'Plat modifier !');
     }
-}
 
+    public function Users_list(){
+        $Users = User::all(); 
+
+        return view('Users_list', compact('Users'));//->with()
+    }
+
+    public function Del_User($id){
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return back()->with('success', 'User delete');
+
+    }
+
+    
+    public function User_Admin($id){
+        $user = User::find($id); 
+        $user->givePermissionTo('Create Dish');
+        $user->givePermissionTo('Edit Dish');
+
+        return back(); 
+    }
+
+}

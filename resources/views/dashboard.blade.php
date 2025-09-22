@@ -59,7 +59,7 @@
           <div class="col-md-6">
             <div class="p-4 bg-white shadow rounded text-center">
               <h5 class="fw-bold">Nombre de vos plats</h5>
-              <div class="display-4">X</div>
+              <div class="display-4">{{$NB_MY_DISHES}}</div>
             </div>
     </div>
 

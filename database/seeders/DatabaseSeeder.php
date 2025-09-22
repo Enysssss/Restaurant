@@ -16,7 +16,12 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        Dish::factory()->count(10)->create();
+        Dish::factory()->count(40)->create();
+        User::factory()->count(10)->create();
+        $this->call([
+
+            RolesAndPermissionsSeeder::class,
+        ]);
 
         //        User::factory()->create([
         //            'name' => 'Test User',

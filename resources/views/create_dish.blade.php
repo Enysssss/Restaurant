@@ -7,7 +7,9 @@
   <!-- Bootstrap CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
+@include('layouts.navbar')
 <body>
+
   <div class="container mt-5">
     <h2>Create a New Dish</h2>
     
@@ -48,6 +50,11 @@
           id="dishImage"
         />
       </div>
+        @if ($errors->has('error_create_dish'))
+            <div class="alert alert-danger">
+                {{ $errors->first('error_create_dish') }}
+            </div>
+        @endif
 
       <button type="submit" class="btn btn-primary">Create Dish</button>
     </form>

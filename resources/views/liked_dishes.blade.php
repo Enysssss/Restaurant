@@ -18,8 +18,8 @@
         }
     </style>
 </head>
+@include('layouts.navbar')
 <body class="bg-light">
-
 <div class="container py-5">
     <h1 class="text-center mb-5">❤️ Mes plats aimés</h1>
 
