@@ -32,6 +32,12 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100">Créer le compte</button>
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            Déjà un compte ? 
+                            <a href="{{ route('form_login') }}" class="text-decoration-none fw-semibold">Se connecter</a>
+                        </small>
+                    </div>
                 </form>
 
           

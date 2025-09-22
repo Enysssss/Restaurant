@@ -52,6 +52,12 @@
 
                     <!-- Bouton -->
                     <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            Pas encore de compte ? 
+                            <a href="{{ route('form_user') }}" class="text-decoration-none fw-semibold">Créer un compte</a>
+                        </small>
+                    </div>
 
                 </form>
 
