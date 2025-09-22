@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, HasRoles, Notifiable;
 
     protected $table = 'users';
 
@@ -50,22 +51,11 @@ class User extends Authenticatable
         ];
     }
 
-    // app/Models/User.php
-
-    // public function dish()
-    // {
-    //     return $this->hasOne(Dish::class);
-    // }
-
     public function dishes()
     {
         return $this->belongsToMany(Dish::class);
     }
 
-    public function didi()
-    {
-        return $this->hasMany(Dish::class, 'user_id');
-    }
 
     public function likedDishes()
     {
