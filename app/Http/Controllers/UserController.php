@@ -86,7 +86,7 @@ class UserController extends Controller
     {
         $UserNow = Auth::user();
         $user = User::find($UserNow->id);
-        $dishes = $user->dishes()->get();
+        $dishes = $user->likedDishes()->get();
 
         return view('liked_dishes', compact('dishes'));
 
@@ -114,13 +114,15 @@ class UserController extends Controller
         return redirect()->route('liste_dishes_user')->with('success', 'Plat modifier !');
     }
 
-    public function Users_list(){
-        $Users = User::all(); 
+    public function Users_list()
+    {
+        $Users = User::all();
 
-        return view('Users_list', compact('Users'));//->with()
+        return view('Users_list', compact('Users')); // ->with()
     }
 
-    public function Del_User($id){
+    public function Del_User($id)
+    {
         $user = User::findOrFail($id);
         $user->delete();
 
@@ -128,13 +130,16 @@ class UserController extends Controller
 
     }
 
-    
-    public function User_Admin($id){
-        $user = User::find($id); 
-        $user->givePermissionTo('Create Dish');
-        $user->givePermissionTo('Edit Dish');
+    public function User_Admin($id)
+    {
+        $user = User::find($id);
+        
+        if ($user->hasRole('admin')) {
+            $user->removeRole('admin');
+        } else {
+            $user->assignRole('admin');
+        }
 
-        return back(); 
+        return back();
     }
-
 }

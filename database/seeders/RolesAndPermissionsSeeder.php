@@ -14,7 +14,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'Create Dish']);
         Permission::firstOrCreate(['name' => 'Edit Dish']);
 
-        $admin = Role::firstOrCreate(['name' => 'admin']);  
+        $admin = Role::firstOrCreate(['name' => 'admin']);
         $admin->givePermissionTo('Create Dish');
         $admin->givePermissionTo('Edit Dish');
 

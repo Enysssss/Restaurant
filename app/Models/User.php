@@ -60,4 +60,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Dish::class);
     }
+
+        public function comments()
+    {
+        return $this->hasMany(Comment::class); // 1 user -> plusieurs commentaires
+    }
 }

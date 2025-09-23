@@ -20,8 +20,7 @@ class CheckIfAdmin
         $userConnected = Auth::User();
         $user = User::find($userConnected->id);
 
-
-        if ($user->can('Create Dish')) {
+        if ($user->hasrole('admin')) {
             return $next($request);
         } else {
             return redirect()->route('dashboard')->withErrors(['error_create_dish' => 'PROUBLEME, Not authorise to create dish']);
@@ -29,4 +28,3 @@ class CheckIfAdmin
 
     }
 }
-

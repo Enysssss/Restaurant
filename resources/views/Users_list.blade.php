@@ -33,7 +33,6 @@
     </div>
 </nav>
 
-<!-- CONTENU -->
 <div class="container py-5">
     <h1 class="text-center mb-5">👥 Gestion des Utilisateurs</h1>
 
@@ -42,12 +41,10 @@
             <div class="col-md-6 col-lg-4">
                 <div class="card shadow-sm border-0 h-100">
                     <div class="card-body d-flex flex-column">
-                        <!-- Nom -->
                         <h5 class="card-title text-primary fw-bold">{{ $user->name }}</h5>
                         <p class="card-text text-muted">ID : {{ $user->id }}</p>
 
                         <div class="mt-auto d-flex justify-content-between">
-                            <!-- Bouton Supprimer -->
                             <form action="{{ route('Del_User', $user->id) }}" method="POST" onsubmit="return confirm('Supprimer cet utilisateur ?');">
                                 @csrf
                                 @method('DELETE')
@@ -56,13 +53,21 @@
                                 </button>
                             </form>
 
-                            <!-- Bouton Admin -->
                             <form action="{{ route('User_Admin', $user->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" name="action" value="admin" class="btn btn-warning btn-sm">
-                                    ⭐ Donner droits admin
-                                </button>
+                                
+                                @if ($user->hasRole('admin'))
+                                    <button type="submit" name="action" value="remove_admin" class="btn btn-danger btn-sm">
+                                        ❌ Retirer droits admin
+                                    </button>
+                                @else
+                                    <button type="submit" name="action" value="make_admin" class="btn btn-warning btn-sm">
+                                        ⭐ Donner droits admin
+                                    </button>
+                                @endif
+
+                                    
                             </form>
                         </div>
                     </div>

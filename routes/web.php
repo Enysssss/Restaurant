@@ -3,28 +3,22 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DishController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CheckIfAdmin;
+use App\Http\Middleware\CheckIfConnected;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schedule;
-use App\Http\Middleware\CheckIfAdmin;
 
-
-// Home
-Route::get('/', function () {
-    if (Auth::check()) {        
-        return redirect()->route('dashboard'); 
-    }else{
-        return view('home');
-    }
-    
-})->name('home');
+// Home 
+Route::get('/', function () {return view('home');})->middleware(CheckIfConnected::class)->name('home');
 
 // create User
-Route::get('creer', [UserController::class, 'index'])->name('form_user');
+Route::get('creer', [UserController::class, 'index'])->middleware(CheckIfConnected::class)->name('form_user');
 Route::post('creer', [UserController::class, 'store'])->name('create_user');
 
 // Register
-Route::get('login', [UserController::class, 'form_login'])->name('form_login');
+Route::get('login', [UserController::class, 'form_login'])->middleware(CheckIfConnected::class)->name('form_login');
 Route::post('login', [UserController::class, 'login'])->name('login_user');
 
 Route::get('dashboard', [DishController::class, 'dashboard'])->middleware('auth')->name('dashboard');
@@ -49,7 +43,6 @@ Route::post('/edit/{id}', [UserController::class, 'edit'])->name('edit');
 // Déconnection
 Route::post('/logout', function () {
     Auth::logout();
-
     return redirect()->route('form_login')->with('success', 'Déconnexion réussie');
 })->name('logout');
 
@@ -60,18 +53,14 @@ Route::delete('/unlike/{id}', [UserController::class, 'unlike'])->name('unlike')
 // Les likes du user
 Route::get('/MyLikes', [UserController::class, 'MyLikes'])->name('My_Likes');
 
+Route::get('/Users_list', [UserController::class, 'Users_list'])->middleware(CheckIfAdmin::class)->name('Users_list');
 
-// Route::get('/dish/{id}', [DishController::class, 'show'])->name('dish.show');
-Route::get('/Users_list', [UserController::class, 'Users_list'])->name('Users_list');
+// del a user
+Route::delete('/Del_User/{id}', [UserController::class, 'Del_User'])->middleware(CheckIfAdmin::class)->name('Del_User');
+Route::delete('/User_Admin/{id}', [UserController::class, 'User_Admin'])->middleware(CheckIfAdmin::class)->name('User_Admin');
 
-
-//del a user
-Route::delete('/Del_User/{id}', [UserController::class, 'Del_User'])->name('Del_User');
-Route::delete('/User_Admin/{id}', [UserController::class, 'User_Admin'])->name('User_Admin');
-
-Route::get('/a', function(){
-    view('Mail_Dish'); 
-}); 
+Route::get('/Detail_Dish/{id}', [DishController::class, 'Detail_Dish'])->name('Detail_Dish');
+Route::post('/Put_Comment/{id}', [DishController::class, 'Put_Comment'])->name('Put_Comment');
 
 // ==================== POUBELLE =================================
 // Route::get('/update_dish/{id}', [DishController::class, 'update'])->name('update_dish');

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DishStoreRequest;
+use Illuminate\Http\Request;
 use App\Mail\DishMail;
 use App\Models\Dish;
 use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -78,5 +80,31 @@ class DishController extends Controller
 
         return view(('dashboard'), compact('NB_Dishes', 'NB_client','NB_MY_LIKES', 'NB_MY_DISHES'));
     }
-    
+
+    public function Detail_Dish($id)
+    {
+        $plat = Dish::findOrFail($id);
+
+        $comments = $plat->comments()->get();
+
+        return view('Detail_Dish', compact('plat', 'comments'));
+    }
+
+    public function Put_Comment(Request $request, $id)
+    {
+        $request->validate([
+            'text' => 'required|string',
+        ]);
+
+        $user = Auth::user();
+        $dish = Dish::findOrFail($id);
+
+        $comment = new Comment;
+        $comment->text = $request->text;
+        $comment->user_id = $user->id;
+        $comment->dish_id = $dish->id;
+        $comment->save();
+
+        return back();
+    }
 }

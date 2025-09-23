@@ -38,14 +38,16 @@
 
     <div class="row g-4">
     @foreach ($plats as $plat)
-        <div class="col-md-6 col-lg-4">
+        <div  class="col-md-6 col-lg-4">
             <div class="card h-100 shadow-sm">
-                <img 
+                <a href={{route('Detail_Dish',$plat->id)}}>
+                <img  
                     src="{{ $plat->image }}" 
                     class="card-img-top img-fluid"
                     alt="Image du plat" 
                     style="height: 250px; object-fit: cover;"
                 >
+                </a>
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ $plat->name }}</h5>
                     <p class="card-text">{{ $plat->descriptionXX }}</p>

@@ -1,117 +1,99 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Détail du Plat</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <title>{{ $plat->name }}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
-        .like-btn {
-            cursor: pointer;
-            width: 28px;
-            height: 28px;
-            fill: gray;
-            transition: fill 0.3s ease;
-        }
-        .like-btn.liked {
-            fill: red;
-        }
         .dish-image {
-            width: 100%;
             max-height: 500px;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 15px;
         }
-        .btn-custom {
-            min-width: 120px;
+        .action-btn {
+            width: 100%; /* tous les boutons mêmes largeur */
+            margin-bottom: 10px; /* espace entre les boutons */
+        }
+        .comment-card {
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .comment-section {
+            margin-top: 50px;
         }
     </style>
 </head>
-<body class="bg-light">
 @include('layouts.navbar')
+<body class="bg-light">
 
 <div class="container py-5">
-    <div class="row g-4 align-items-start">
-        {{-- Image à gauche --}}
-        <div class="col-lg-6">
-            <img src="{{ $dish->image }}" alt="{{ $dish->name }}" class="dish-image shadow-sm">
+    <div class="row align-items-center">
+        <!-- Image du plat -->
+        <div class="col-md-6 mb-4 mb-md-0">
+            <img 
+                src="{{ $plat->image }}" 
+                alt="Image du plat {{ $plat->name }}" 
+                class="img-fluid shadow dish-image"
+            >
         </div>
 
-        {{-- Détails à droite --}}
-        <div class="col-lg-6 d-flex flex-column justify-content-between">
-            <div>
-                <h1 class="mb-4">{{ $dish->name }}</h1>
-            </div>
+        <!-- Infos du plat -->
+        <div class="col-md-6">
+            <h1 class="mb-3">{{ $plat->name }}</h1>
+            <p class="lead text-muted">{{ $plat->descriptionXX }}</p>
 
-            <div class="mb-4">
-                <p class="lead">{{ $dish->description ?? 'Pas de description disponible.' }}</p>
-            </div>
+            <div class="mt-4 d-grid gap-2">
+                <a href="{{ route('list_dishes') }}" class="btn btn-secondary action-btn">
+                    ⬅️ Retour à la liste
+                </a>
+                @if ($plat->user_id == Auth::id())
+                    <a href="{{ route('edit', $plat->id) }}" class="btn btn-warning action-btn">
+                    ✏️ Modifier
+                </a>
+                @endif
+                
 
-            <div class="d-flex gap-3 mt-auto">
-                {{-- Bouton Liker --}}
-                <form action="{{ route('like', $dish->id) }}" method="POST">
+                <form action="{{ route('delete_dish', $plat->id) }}" method="POST" 
+                      class="d-inline" 
+                      onsubmit="return confirm('Supprimer ce plat ?')">
                     @csrf
-                    <button type="submit" class="btn btn-outline-primary btn-custom d-flex align-items-center">
-                        <svg class="like-btn me-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                        Liker
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger action-btn">
+                        🗑️ Supprimer
                     </button>
                 </form>
-
-                {{-- Bouton Supprimer --}}
-                <button type="button" class="btn btn-danger btn-custom" 
-                        data-bs-toggle="modal" 
-                        data-bs-target="#deleteModal" 
-                        data-dishid="{{ $dish->id }}">
-                    Supprimer
-                </button>
             </div>
         </div>
     </div>
-</div>
 
-{{-- Modal de suppression --}}
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">Confirmer la suppression</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-      </div>
-      <div class="modal-body">
-        Êtes-vous sûr de vouloir supprimer ce plat ?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-        <form id="deleteForm" method="POST" action="">
+    <!-- Section Commentaires -->
+    <div class="comment-section">
+        <h3 class="mb-3">💬 Commentaires</h3>
+
+        <!-- Liste des commentaires -->
+        <div class="mb-4">
+            @foreach ($comments as $comment)
+                <div class="card mb-2 comment-card p-2">
+                    <p class="mb-1">{{ $comment->text }}</p>
+                    <small class="text-muted">
+                        Par {{ $comment->user->name ?? $comment->user_id }} 
+                        • {{ $comment->created_at->format('d/m/Y H:i') }}
+                    </small>
+                </div>
+            @endforeach
+
+        </div>
+
+        <!-- Formulaire de commentaire -->
+        <form action="{{ route('Put_Comment', $plat->id) }}" method="POST" class="d-flex gap-2">
             @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger">Supprimer</button>
+            <input type="text" name="text" class="form-control" placeholder="Votre commentaire" required>
+            <button type="submit" class="btn btn-primary">Envoyer</button>
         </form>
-      </div>
     </div>
-  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Like bouton visuel
-    document.querySelectorAll('.like-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            btn.classList.toggle('liked');
-        });
-    });
-
-    // Passer l'ID du plat dans la modal de suppression
-    var deleteModal = document.getElementById('deleteModal');
-    deleteModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var dishId = button.getAttribute('data-dishid');
-        var form = deleteModal.querySelector('#deleteForm');
-
-        form.action = "{{ url('delete_dish') }}/" + dishId;
-    });
-</script>
-
 </body>
 </html>

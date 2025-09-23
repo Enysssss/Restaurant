@@ -14,28 +14,30 @@
 <div class="container-fluid p-0">
   <div class="d-flex">
     <!-- Colonne gauche : boutons -->
-    <div class="d-flex flex-column p-2" style="min-width: 200px;">
-      @can('Create Dish')
-        <a href="{{ route('form_dish') }}" class="btn btn-primary btn-lg mb-3">
-          Créer un plat
+    <!-- Colonne gauche : boutons stylés comme des cards -->
+<div class="d-flex flex-column p-3" style="min-width: 220px; gap: 15px;">
+    @can('Create Dish')
+        <a href="{{ route('form_dish') }}" class="btn btn-white shadow-sm rounded text-primary py-3 fw-bold text-center">
+            Créer un plat
         </a>
-        <a href="{{ route('Users_list') }}" class="btn btn-primary btn-lg mb-3">
-          Liste Utilisateurs
+        <a href="{{ route('Users_list') }}" class="btn btn-white shadow-sm rounded text-primary py-3 fw-bold text-center">
+            Liste Utilisateurs
         </a>
-      @endcan
+    @endcan
 
-      <a href="{{ route('list_dishes') }}" class="btn btn-outline-primary btn-lg mb-3">
+    <a href="{{ route('list_dishes') }}" class="btn btn-white shadow-sm rounded text-primary py-3 fw-bold text-center">
         Liste des plats
-      </a>
+    </a>
 
-      <a href="{{ route('My_Likes') }}" class="btn btn-outline-primary btn-lg mb-3">
+    <a href="{{ route('My_Likes') }}" class="btn btn-white shadow-sm rounded text-primary py-3 fw-bold text-center">
         Favoris
-      </a>
+    </a>
 
-      <a href="{{ route('liste_dishes_user') }}" class="btn btn-outline-primary btn-lg mb-3">
+    <a href="{{ route('liste_dishes_user') }}" class="btn btn-white shadow-sm rounded text-primary py-3 fw-bold text-center">
         Mes Plats
-      </a>
-    </div>
+    </a>
+</div>
+
 
     <!-- Colonne droite : champs pour écrire des numéros -->
     <div class="flex-grow-1 p-3">
@@ -65,11 +67,25 @@
 
     <div class="col-md-6">
       <div class="p-4 bg-white shadow rounded text-center">
-        <h5 class="fw-bold">Nombre de like sur vos plats</h5>
+        <h5 class="fw-bold">Nombre de plats liker</h5>
         <div class="display-4">{{$NB_MY_LIKES}}</div>
       </div>
     </div>
-  </div>
+
+     <div class="col-md-6">
+      <div class="p-4 bg-white shadow rounded text-center">
+        <h5 class="fw-bold">Nombre de like sur vos plats</h5>
+        <div class="display-4">X</div>
+      </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="p-4 bg-white shadow rounded text-center">
+          <h5 class="fw-bold">Le plat du moment</h5>
+          <div class="display-4">X</div>
+        </div>
+      </div>
+ 
 </div>
 
   </div>

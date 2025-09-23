@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Dish;
 use App\Models\User;
+use App\Models\Comment;
+//use Dom\Comment;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -18,6 +20,7 @@ class DatabaseSeeder extends Seeder
 
         Dish::factory()->count(40)->create();
         User::factory()->count(10)->create();
+        Comment::factory()->count(50)->create();
         $this->call([
 
             RolesAndPermissionsSeeder::class,
