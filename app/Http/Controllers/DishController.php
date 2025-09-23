@@ -6,7 +6,6 @@ use App\Http\Requests\DishStoreRequest;
 use App\Mail\DishMail;
 use App\Models\Dish;
 use App\Models\User;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -20,7 +19,7 @@ class DishController extends Controller
     public function list_dishes()
     {
         $plats = Dish::select('name', 'description', 'image', 'id')->paginate(9);
-        
+
         $UserNow = Auth::user();
         $user = User::find($UserNow->id);
         $Dish_Liked = $user->dishes()->pluck('dishes.id')->toArray();
@@ -29,7 +28,8 @@ class DishController extends Controller
         foreach ($plats as $plat) {
             $platsLiked[$plat->id] = in_array($plat->id, $Dish_Liked);
         }
-        return view('list_dishes', compact('plats','platsLiked'));
+
+        return view('list_dishes', compact('plats', 'platsLiked'));
     }
 
     public function store(DishStoreRequest $request)
@@ -61,7 +61,7 @@ class DishController extends Controller
     {
         $userConnected = Auth::user();
         $id = $userConnected->id;
-        $plats = Dish::select('name', 'description', 'image', 'id')->where('user_id', $id) ->paginate(9);
+        $plats = Dish::select('name', 'description', 'image', 'id')->where('user_id', $id)->paginate(9);
 
         return view('list_dishes_user', compact('plats'));
     }
@@ -70,15 +70,13 @@ class DishController extends Controller
     {
         $NB_Dishes = Dish::count();
         $NB_client = User::count();
-        $userCO = Auth::user(); 
-        $user = User::find($userCO->id); 
+        $userCO = Auth::user();
+        $user = User::find($userCO->id);
+   
         $NB_MY_DISHES = $user->dishes()->count();
-        if($NB_MY_DISHES == 0){
-            $NB_MY_likes = 0; 
-        }else{
-            //$NB_MY_likes = $user->likedDishes()->count();
-        }
-        return view(('dashboard'), compact('NB_Dishes', 'NB_client' ,'NB_MY_DISHES')); //,'NB_MY_likes'
-    }
+        $NB_MY_LIKES = $user->likedDishes()->count();
 
+        return view(('dashboard'), compact('NB_Dishes', 'NB_client','NB_MY_LIKES', 'NB_MY_DISHES'));
+    }
+    
 }
