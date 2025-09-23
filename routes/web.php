@@ -59,8 +59,10 @@ Route::get('/Users_list', [UserController::class, 'Users_list'])->middleware(Che
 Route::delete('/Del_User/{id}', [UserController::class, 'Del_User'])->middleware(CheckIfAdmin::class)->name('Del_User');
 Route::delete('/User_Admin/{id}', [UserController::class, 'User_Admin'])->middleware(CheckIfAdmin::class)->name('User_Admin');
 
-Route::get('/Detail_Dish/{id}', [DishController::class, 'Detail_Dish'])->name('Detail_Dish');
+Route::get('/Detail_Dish/{id}', [DishController::class, 'detailDish'])->name('Detail_Dish');
 Route::post('/Put_Comment/{id}', [DishController::class, 'Put_Comment'])->name('Put_Comment');
+
+Route::fallback(function() {return view('404'); });
 
 // ==================== POUBELLE =================================
 // Route::get('/update_dish/{id}', [DishController::class, 'update'])->name('update_dish');
