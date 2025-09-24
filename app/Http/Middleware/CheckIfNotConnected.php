@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class CheckIfConnected
+class CheckIfNotConnected
 {
     /**
      * Handle an incoming request.
@@ -17,8 +17,8 @@ class CheckIfConnected
     public function handle(Request $request, Closure $next): Response
     {
 
-        if (Auth::check()) {
-            return redirect()->route('dashboard');
+        if (!(Auth::check())) {
+            return redirect()->route('home');
         }
         return $next($request);
     }
