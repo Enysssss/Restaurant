@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('dish_id')->constrained()->onDelete('cascade');
             $table->text('text');
             $table->timestamps();
-            // $table->morphs('commentable');
         });
     }
 

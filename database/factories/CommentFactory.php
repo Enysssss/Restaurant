@@ -19,8 +19,6 @@ class CommentFactory extends Factory
     public function definition(): array
     {
         return [
-            // 'user_id' => User::factory(),
-            // 'dish_id' => Dish::factory(),
             'text' => $this->faker->text(),
         ];
     }
