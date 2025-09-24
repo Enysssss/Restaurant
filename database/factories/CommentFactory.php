@@ -23,4 +23,3 @@ class CommentFactory extends Factory
         ];
     }
 }
-// a faire dans le user direct i guess 
