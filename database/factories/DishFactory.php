@@ -39,7 +39,7 @@ class DishFactory extends Factory
 
         return [
             'name' => $this->faker->foodName(),
-            'image' => $this->faker->randomElement($images),
+            'image' => $this->faker->randomElement($images),//'image' => "https://picsum.photos/640/480?random=" . rand(1, 1000),
             'description' => $this->faker->text(),
         ];
     }

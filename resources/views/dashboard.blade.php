@@ -7,6 +7,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
           crossorigin="anonymous" />
+          <style>
+    .menu-card {
+        color: black;
+        transition: all 0.3s ease;
+    }
+    .menu-card:hover {
+        background-color: black;
+        color: white !important;
+    }
+</style>
+
 </head>
 <body class="bg-light">
   @include('layouts.navbar') <!-- La navbar est incluse ici -->
@@ -17,26 +28,37 @@
     <!-- Colonne gauche : boutons stylés comme des cards -->
 <div class="d-flex flex-column p-3" style="min-width: 220px; gap: 15px;">
     @can('Create Dish')
-        <a href="{{ route('form_dish') }}" class="btn btn-white shadow-sm rounded text-primary py-3 fw-bold text-center">
-            Créer un plat
+        <a href="{{ route('formDish') }}" class="card text-center shadow-sm py-3 fw-bold text-decoration-none menu-card">
+            <div class="card-body">
+                Créer un plat
+            </div>
         </a>
-        <a href="{{ route('Users_list') }}" class="btn btn-white shadow-sm rounded text-primary py-3 fw-bold text-center">
-            Liste Utilisateurs
+        <a href="{{ route('userList') }}" class="card text-center shadow-sm py-3 fw-bold text-decoration-none menu-card">
+            <div class="card-body">
+                Liste Utilisateurs
+            </div>
         </a>
     @endcan
 
-    <a href="{{ route('list_dishes') }}" class="btn btn-white shadow-sm rounded text-primary py-3 fw-bold text-center">
-        Liste des plats
+    <a href="{{ route('listDishes') }}" class="card text-center shadow-sm py-3 fw-bold text-decoration-none menu-card">
+        <div class="card-body">
+            Liste des plats
+        </div>
     </a>
 
-    <a href="{{ route('My_Likes') }}" class="btn btn-white shadow-sm rounded text-primary py-3 fw-bold text-center">
-        Favoris
+    <a href="{{ route('myLikes') }}" class="card text-center shadow-sm py-3 fw-bold text-decoration-none menu-card">
+        <div class="card-body">
+            Favoris
+        </div>
     </a>
 
-    <a href="{{ route('liste_dishes_user') }}" class="btn btn-white shadow-sm rounded text-primary py-3 fw-bold text-center">
-        Mes Plats
+    <a href="{{ route('listUserDish') }}" class="card text-center shadow-sm py-3 fw-bold text-decoration-none menu-card">
+        <div class="card-body">
+            Mes Plats
+        </div>
     </a>
 </div>
+
 
 
     <!-- Colonne droite : champs pour écrire des numéros -->
@@ -46,14 +68,14 @@
           <div class="col-md-6">
             <div class="p-4 bg-white shadow rounded text-center">
               <h5 class="fw-bold">Nombre TOTAL de Plats </h5>
-              <div class="display-4">{{ $NB_Dishes }}</div>
+              <div class="display-4">{{ $NbDishes }}</div>
             </div>
           </div>
 
           <div class="col-md-6">
             <div class="p-4 bg-white shadow rounded text-center">
               <h5 class="fw-bold">Nombre d'Utilisateurs</h5>
-              <div class="display-4">{{ $NB_client }}</div>
+              <div class="display-4">{{ $NbClient }}</div>
             </div>
           </div>
 
@@ -75,14 +97,14 @@
      <div class="col-md-6">
       <div class="p-4 bg-white shadow rounded text-center">
         <h5 class="fw-bold">Nombre de like sur vos plats</h5>
-        <div class="display-4">X</div>
+        <div class="display-4">{{$allMylLikes}}</div>
       </div>
       </div>
 
       <div class="col-md-6">
         <div class="p-4 bg-white shadow rounded text-center">
           <h5 class="fw-bold">Le plat du moment</h5>
-          <div class="display-4">X</div>
+          <div class="display-4">{{$DishMoreLiked->id}} : {{$platIdMax}}</div>
         </div>
       </div>
  

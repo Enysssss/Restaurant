@@ -60,7 +60,7 @@
         <p>Nous sommes ravis de vous accueillir sur <strong>🍽️ MonRestaurant</strong> !</p>
         <p>Votre compte a bien été créé et vous pouvez dès maintenant commencer à découvrir et créer vos plats favoris.</p>
 
-        <a href="{{ route('form_login') }}" class="btn">Accéder à votre compte</a>
+        <a href="{{ route('formLogin') }}" class="btn">Accéder à votre compte</a>
 
         <p>Merci de nous avoir rejoint et bon appétit !</p>
 

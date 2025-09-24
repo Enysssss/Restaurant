@@ -53,16 +53,17 @@ class User extends Authenticatable
 
     public function dishes()
     {
-        return $this->hasMany(Dish::class);
+        return $this->belongsToMany(Dish::class, 'dish_user', 'user_id', 'dish_id');
     }
+
 
     public function likedDishes()
     {
         return $this->belongsToMany(Dish::class);
     }
 
-        public function comments()
-    {
-        return $this->hasMany(Comment::class); // 1 user -> plusieurs commentaires
-    }
+    //     public function comments()
+    // {
+    //     return $this->hasMany(Comment::class); // 1 user -> plusieurs commentaires
+    // }
 }

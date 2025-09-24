@@ -17,17 +17,23 @@ class UserController extends Controller
         return view('Register');
     }
 
-    public function form_login()
+    public function formLogin()
     {
         return view('connection');
     }
 
-    public function store(Request $request)
+    public function createUser(Request $request)
     {
         $request->validate([
             'username' => 'required|string|max:255',
             'password' => 'required',
         ]);
+
+        $user = User::where('name', $request->username)->exists();
+
+        if ($user) {
+             return back()->withErrors(['username' => 'Utilisateur existe déjà, veillez choisir un autre nom d\'utilisateur !'])->withInput();
+          }
 
         $user = new User;
         $user->name = $request->username;
@@ -37,7 +43,7 @@ class UserController extends Controller
 
         Mail::to($user->email)->send(new UserMail($user));
 
-        return redirect()->route('form_login')->with('succes', 'Inscription Réalisée !');
+        return redirect()->route('formLogin')->with('succes', 'Inscription Réalisée !');
     }
 
     public function login(Request $request)
@@ -68,7 +74,7 @@ class UserController extends Controller
     {
         $user = Auth::User();
         $dish = Dish::find($id);
-        $dish->users()->attach($user->id);
+        $dish->likedByUsers()->attach($user->id);
 
         return back();
     }
@@ -77,7 +83,7 @@ class UserController extends Controller
     {
         $user = Auth::User();
         $dish = Dish::find($id);
-        $dish->users()->detach($user->id);
+        $dish->likedByUsers()->detach($user->id);
 
         return back();
     }
@@ -92,7 +98,7 @@ class UserController extends Controller
 
     }
 
-    public function Edit_Dish($id)
+    public function editDish($id)
     {
         $dish = Dish::find($id);
 
@@ -111,26 +117,25 @@ class UserController extends Controller
         $dish->description = $request->description;
         $dish->save();
 
-        return redirect()->route('liste_dishes_user')->with('success', 'Plat modifier !');
+        return redirect()->route('listUserDish')->with('success', 'Plat modifier !');
     }
 
-    public function Users_list()
+    public function userList()
     {
         $Users = User::all();
-
-        return view('Users_list', compact('Users')); // ->with()
+        return view('Users_list', compact('Users')); 
     }
 
-    public function Del_User($id)
+    public function deleteUser($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::find($id);
         $user->delete();
 
         return back()->with('success', 'User delete');
 
     }
 
-    public function User_Admin($id)
+    public function userBecomeAdmin($id)
     {
         $user = User::find($id);
         

@@ -41,7 +41,7 @@
 
                         <div class="mt-auto d-flex justify-content-between">
                             <!-- Bouton Supprimer -->
-                            <form action="{{ route('delete_dish', $plat->id) }}" method="POST" onsubmit="return confirm('Supprimer ce plat ?')" class="me-2">
+                            <form action="{{ route('deleteDish', $plat->id) }}" method="POST" onsubmit="return confirm('Supprimer ce plat ?')" class="me-2">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm w-100">
@@ -50,7 +50,7 @@
                             </form>
 
                             <!-- Bouton Edit -->
-                            <form action="{{ route('edit', $plat->id) }}" method="GET">
+                            <form action="{{ route('editDish', $plat->id) }}" method="GET">
                                 @csrf
                                 <button type="submit" class="btn btn-warning btn-sm w-100">
                                     ✏️ Edit

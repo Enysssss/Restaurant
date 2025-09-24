@@ -22,6 +22,10 @@
         .comment-section {
             margin-top: 50px;
         }
+        .comment-card2 {
+            background-color: #e0f7fa; /* couleur bleu clair */
+        }
+
     </style>
 </head>
 @include('layouts.navbar')
@@ -44,7 +48,7 @@
             <p class="lead text-muted">{{ $plat->descriptionXX }}</p>
 
             <div class="mt-4 d-grid gap-2">
-                <a href="{{ route('list_dishes') }}" class="btn btn-secondary action-btn">
+                <a href="{{ route('listDishes') }}" class="btn btn-secondary action-btn">
                     ⬅️ Retour à la liste
                 </a>
                 @if ($plat->user_id == Auth::id())
@@ -53,8 +57,8 @@
                 </a>
                 @endif
                 
-
-                <form action="{{ route('delete_dish', $plat->id) }}" method="POST" 
+                @can('Edit Dish')
+                    <form action="{{ route('deleteDish', $plat->id) }}" method="POST" 
                       class="d-inline" 
                       onsubmit="return confirm('Supprimer ce plat ?')">
                     @csrf
@@ -63,6 +67,8 @@
                         🗑️ Supprimer
                     </button>
                 </form>
+                @endcan
+                
             </div>
         </div>
     </div>
@@ -71,22 +77,37 @@
     <div class="comment-section">
         <h3 class="mb-3">💬 Commentaires</h3>
 
-        <!-- Liste des commentaires -->
         <div class="mb-4">
             @foreach ($comments as $comment)
-                <div class="card mb-2 comment-card p-2">
-                    <p class="mb-1">{{ $comment->text }}</p>
-                    <small class="text-muted">
-                        Par {{ $comment->user->name ?? $comment->user_id }} 
-                        • {{ $comment->created_at->format('d/m/Y H:i') }}
-                    </small>
+                @php
+                    $isCurrentUser = Auth::user() && $comment->user->id === Auth::user()->id;
+                @endphp
+
+                <div class="card mb-2 {{ $isCurrentUser ? 'comment-card2' : 'comment-card' }} p-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-0">{{ $comment->text }}</p>
+                            <small class="text-muted">
+                                Par {{ $comment->user->name }}{{ $isCurrentUser ? ' (moi)' : '' }}
+                                • {{ $comment->created_at->format('d/m/Y H:i') }}
+                            </small>
+                        </div>
+
+                        @if ($isCurrentUser)
+                            <form action="{{ route('deleteComment', $comment->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+                            </form>
+                        @endif
+                    </div>
                 </div>
             @endforeach
-
         </div>
+    </div>
 
         <!-- Formulaire de commentaire -->
-        <form action="{{ route('Put_Comment', $plat->id) }}" method="POST" class="d-flex gap-2">
+        <form action="{{ route('putComment', $plat->id) }}" method="POST" class="d-flex gap-2">
             @csrf
             <input type="text" name="text" class="form-control" placeholder="Votre commentaire" required>
             <button type="submit" class="btn btn-primary">Envoyer</button>

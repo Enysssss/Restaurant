@@ -51,7 +51,7 @@
         @empty
             <div class="text-center text-muted">
                 <h4>Aucun plat aimé pour le moment.</h4>
-                <p>Tu peux liker des plats depuis la <a  href="{{route('list_dishes')}}" >liste principale !!</a> 🍔🍟</p>
+                <p>Tu peux liker des plats depuis la <a  href="{{route('listDishes')}}" >liste principale !!</a> 🍔🍟</p>
             </div>
         @endforelse
     </div>

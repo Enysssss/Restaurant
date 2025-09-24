@@ -13,7 +13,7 @@
   <div class="container mt-5">
     <h2>Create a New Dish</h2>
     
-    <form method="post" action="{{ route('create_dish') }}" enctype="multipart/form-data">
+    <form method="post" action="{{ route('createDish') }}" enctype="multipart/form-data">
       @csrf <!-- Protection CSRF -->
 
       <div class="mb-3">
@@ -48,6 +48,7 @@
           class="form-control"
           type="file"
           id="dishImage"
+          
         />
       </div>
         @if ($errors->has('error_create_dish'))

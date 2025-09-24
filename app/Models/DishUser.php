@@ -25,4 +25,11 @@ class DishUser extends Model
         'user_id',
         'dish_id',
     ];
+
+    //Je viens de mettre cette relation 
+    public function dishes()
+    {
+        return $this->belongsToMany(Dish::class, 'dish_user');
+    }
+
 }

@@ -11,44 +11,51 @@ use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
+
 class DishController extends Controller
 {
-    public function index()
+    public function formDish()
     {
         return view('create_dish');
     }
 
-    public function list_dishes()
+    public function listDishes()
     {
-        $plats = Dish::select('name', 'description', 'image', 'id')->paginate(9);
-
         $UserNow = Auth::user();
         $user = User::find($UserNow->id);
-        $Dish_Liked = $user->dishes()->pluck('dishes.id')->toArray();
 
-        $platsLiked = [];
+        $plats = Dish::select('name', 'description', 'image', 'id')->paginate(9);
+        $Dish_Liked = $user->likedDishes()->pluck('dishes.id')->toArray();
+        
+        $nbLikes = [];
+        $platsLiked = []; 
         foreach ($plats as $plat) {
             $platsLiked[$plat->id] = in_array($plat->id, $Dish_Liked);
+            $nbLikes[$plat->id] = $plat->likedByUsers->count(); 
         }
 
-        return view('list_dishes', compact('plats', 'platsLiked'));
+        return view('list_dishes', compact('plats', 'platsLiked','nbLikes'));
     }
 
-    public function store(DishStoreRequest $request)
+    public function createDish(DishStoreRequest $request)
     {
 
         $user = Auth::User();
-        $imagePath = $request->file('image')->store('uploads', 'public'); // X
 
         $dish = new Dish;
         $dish->name = $request->name;
         $dish->description = $request->description;
-        $dish->image = $imagePath;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('uploads', 'public');
+            $dish->image = $imagePath;
+        }
+        
         $dish->user_id = $user->id;
         $dish->save();
         Mail::to($user->email)->send(new DishMail($user));
 
-        return redirect()->route('list_dishes')->with('succes', 'Inscription réussie ! + Mail Send');
+        return redirect()->route('listDishes')->with('succes', 'Inscription réussie ! + Mail Send');
     }
 
     public function destroy($id)
@@ -59,7 +66,7 @@ class DishController extends Controller
         return back();
     }
 
-    public function liste_dishes_user()
+    public function listUserDish()
     {
         $userConnected = Auth::user();
         $id = $userConnected->id;
@@ -68,20 +75,7 @@ class DishController extends Controller
         return view('list_dishes_user', compact('plats'));
     }
 
-    public function dashboard()
-    {
-        $NB_Dishes = Dish::count();
-        $NB_client = User::count();
-        $userCO = Auth::user();
-        $user = User::find($userCO->id);
-   
-        $NB_MY_DISHES = $user->dishes()->count();
-        $NB_MY_LIKES = $user->likedDishes()->count();
-
-        return view(('dashboard'), compact('NB_Dishes', 'NB_client','NB_MY_LIKES', 'NB_MY_DISHES'));
-    }
-
-    public function Detail_Dish($id)
+    public function detailDish($id)
     {
         $plat = Dish::findOrFail($id);
 
@@ -90,7 +84,7 @@ class DishController extends Controller
         return view('Detail_Dish', compact('plat', 'comments'));
     }
 
-    public function Put_Comment(Request $request, $id)
+    public function putComment(Request $request, $id)
     {
         $request->validate([
             'text' => 'required|string',
@@ -105,6 +99,49 @@ class DishController extends Controller
         $comment->dish_id = $dish->id;
         $comment->save();
 
-        return back();
+        return back()->with('succes', 'commentaire bien envoyé !');
     }
+
+    public function deleteComment($id){
+        $comment = Comment::where('id', $id); 
+        $comment->delete(); 
+        return back(); 
+    }
+
+    public function dashboard()
+    { 
+        $user = Auth::user(); 
+        $NbDishes = Dish::count();
+        $NbClient = User::count();
+        $userCO = Auth::user();
+        
+        
+        if($userCO != null){
+            $user = User::find($userCO->id);
+        }else{
+            return back()->withErrors('error', 'you need to be conected to got the acces');
+        }
+        
+        $NB_MY_DISHES = $user->dishes()->count();
+
+        $NB_MY_LIKES = $user->likedDishes()->count();
+
+        $plats = Dish::where('user_id', $user->id)->with('likedByUsers')->get();
+
+        $plats2 = Dish::select('name', 'description', 'image', 'id')->paginate(9);
+
+        $allMylLikes = 0;
+        foreach ($plats2 as $plat) {
+            $allMylLikes += $plat->likedByUsers->count();
+            $nbLikes[$plat->id] = $plat->likedByUsers->count(); 
+        }
+        
+        $platIdMax = array_search(max($nbLikes), $nbLikes);
+
+       $data = max($nbLikes); 
+        $DishMoreLiked = Dish::find($platIdMax);
+
+        return view(('dashboard'), compact('NbDishes', 'NbClient','NB_MY_LIKES', "NB_MY_DISHES", 'allMylLikes', 'DishMoreLiked','platIdMax','data'));// 
+    }
+
 }

@@ -2,13 +2,13 @@
 
 namespace Tests\Unit;
 
-// use PHPUnit\Framework\TestCase;
+//use PHPUnit\Framework\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class Logib_test extends TestCase
 {
-    use RefreshDatabase;
+         use RefreshDatabase;
 
     /**
      * A basic unit test example.
@@ -27,18 +27,18 @@ class Logib_test extends TestCase
     }
 }
 
+
 // // <?php
 // <?php
 
 // namespace Tests\Feature;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
-// use Tests\TestCase; //
+// use Tests\TestCase; // 
 
 // class LoginTest extends TestCase
 // {
 //     use RefreshDatabase;
-
-//     /** @test */
-
 // }
+
+// Dans mon projet je souhaiterai implementer une api dactualiter svp 

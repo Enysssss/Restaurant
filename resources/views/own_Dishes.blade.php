@@ -28,17 +28,21 @@
         @foreach ($plats as $plat)
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 shadow-sm">
-                    <img 
-                        src="{{ $plat->image }}" 
+                    <a>
+                     <img 
+                        src="{{ \Illuminate\Support\Str::startsWith($plat->image, ['http://', 'https://']) 
+                                ? $plat->image 
+                                : asset('storage/' . $plat->image) }}" 
                         class="card-img-top img-fluid"
                         alt="Image du plat" 
                         style="height: 250px; object-fit: cover;"
                     >
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title d-flex justify-content-between align-items-center">
                             {{ $plat->name }}
 
-                            <form action="{{ route("delete_dish", $plat->id) }}" method="POST" onsubmit="return confirm('Supprimer ce plat ?')">
+                            <form action="{{ route("deleteDish", $plat->id) }}" method="POST" onsubmit="return confirm('Supprimer ce plat ?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit">Supprimer</button>

@@ -5,30 +5,33 @@ namespace Database\Seeders;
 use App\Models\Dish;
 use App\Models\User;
 use App\Models\Comment;
-//use Dom\Comment;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $users = User::factory()->count(10)->create();
 
-        Dish::factory()->count(40)->create();
-        User::factory()->count(10)->create();
-        Comment::factory()->count(50)->create();
+        $dishes = Dish::factory()->count(20)->make()->each(function ($dish) use ($users) {
+            $dish->user_id = $users->random()->id; 
+            $dish->save();
+        });
+
+        Comment::factory()->count(50)->make()->each(function ($comment) use ($users, $dishes) {
+            $comment->user_id = $users->random()->id;
+            $comment->dish_id = $dishes->random()->id;
+            $comment->save();
+        });
+
+        foreach ($users as $user) {
+            $user->dishes()->attach(
+                $dishes->random(rand(1,5))->pluck('id')->toArray()
+            );
+        }
+
         $this->call([
-
             RolesAndPermissionsSeeder::class,
         ]);
-
-        //        User::factory()->create([
-        //            'name' => 'Test User',
-        //            'email' => 'test@example.com',
-        //        ]);
     }
 }
