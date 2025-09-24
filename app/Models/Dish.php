@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Providers\Encryptable;
 
 class Dish extends Model
 {
     use HasFactory;
 
     protected $table = 'dishes';
+
+    protected $encryptable  = ['description'];
 
     protected $fillable = [
         'name',
@@ -27,11 +30,6 @@ class Dish extends Model
     {
         return $this->belongsToMany(User::class);
     }
-
-    // public function creator()
-    // {
-    //     return $this->belongsTo(User::class, 'user_id');
-    // }
 
     public function comments()
     {
