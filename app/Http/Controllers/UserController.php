@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\UserMail;
 use App\Models\Dish;
 use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -128,10 +129,13 @@ class UserController extends Controller
 
     public function deleteUser($id)
     {
-        $user = User::find($id);
-        $user->delete();
-
-        return back()->with('success', 'User delete');
+        $user = User::find($id); 
+        $user->dishes()->delete();
+        dd($user->likedDishes);//()->delete(); 
+        $user->comments()->delete();
+    //    $user-> delete();
+       
+  //      return back()->with('success', 'User delete');
 
     }
 

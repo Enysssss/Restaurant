@@ -4,16 +4,13 @@ namespace App\Traits;
 
 use Illuminate\Support\Facades\Crypt;
 
-trait Encryptable
-{
-    protected $encryptable = [];
+trait Encryptable{
 
     public function setAttribute($key, $value)
     {
-        if (in_array($key, $this->encryptable) && ! is_null($value)) {
+        if (in_array($key, $this->encryptable) && !is_null($value)) {
             $value = Crypt::encryptString($value);
         }
-
         return parent::setAttribute($key, $value);
     }
 
@@ -21,15 +18,17 @@ trait Encryptable
     {
         $value = parent::getAttribute($key);
 
-        if (in_array($key, $this->encryptable) && ! is_null($value)) {
+        if (in_array($key, $this->encryptable) && !is_null($value)) {
             try {
                 return Crypt::decryptString($value);
             } catch (\Exception $e) {
-                return $value;
+                return $value; 
             }
         }
 
         return $value;
     }
 }
-// ff find on the net
+// si del user => comment supr + Like surpr 
+// si dish supr => comment supr 
+// Si comment supr => pas dautre supr 

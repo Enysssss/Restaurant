@@ -115,7 +115,6 @@ class DishController extends Controller
         $NbClient = User::count();
         $userCO = Auth::user();
         
-        
         if($userCO != null){
             $user = User::find($userCO->id);
         }else{
@@ -124,7 +123,7 @@ class DishController extends Controller
         
         $NB_MY_DISHES = $user->dishes()->count();
 
-        $NB_MY_LIKES = $user->likedDishes()->count();
+//        $NB_MY_LIKES = $user->likedDishes()->count();
 
         $plats = Dish::where('user_id', $user->id)->with('likedByUsers')->get();
 
@@ -141,7 +140,6 @@ class DishController extends Controller
        $data = max($nbLikes); 
         $DishMoreLiked = Dish::find($platIdMax);
 
-        return view(('dashboard'), compact('NbDishes', 'NbClient','NB_MY_LIKES', "NB_MY_DISHES", 'allMylLikes', 'DishMoreLiked','platIdMax','data'));// 
+        return view(('dashboard'), compact('NbDishes', 'NbClient', "NB_MY_DISHES", 'allMylLikes', 'DishMoreLiked','platIdMax','data'));
     }
-
 }

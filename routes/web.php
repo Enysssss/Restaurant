@@ -63,7 +63,7 @@ Route::get('/detailDish/{id}', [DishController::class, 'detailDish'])->middlewar
 //Commenter un plat 
 Route::post('/putComment/{id}', [DishController::class, 'putComment'])->middleware(CheckIfNotConnected::class)->name('putComment');
 
-Route::get('/deleteComment/{id}',[DishController::class, 'deleteComment'])->middleware(CheckIfNotConnected::class)->name('deleteComment'); 
+Route::delete('/deleteComment/{id}',[DishController::class, 'deleteComment'])->middleware(CheckIfNotConnected::class)->name('deleteComment'); 
 
 Route::fallback(function() {return view('404'); });
 

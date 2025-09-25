@@ -53,32 +53,38 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title fw-bold">{{ $user->name }}</h5>
                         <p class="card-text text-muted">ID : {{ $user->id }}</p>
-
-                        <div class="mt-auto d-flex justify-content-between">
-                            <form action="{{ route('deleteUser', $user->id) }}" method="POST" onsubmit="return confirm('Supprimer cet utilisateur ?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" name="action" value="delete" class="btn btn-danger btn-sm btn-theme">
-                                    🗑 Supprimer
-                                </button>
-                            </form>
-
-                            <form action="{{ route('userBecomeAdmin', $user->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                
-                                @if ($user->hasRole('admin'))
-                                    <button type="submit" name="action" value="remove_admin" class="btn btn-danger btn-sm btn-theme">
-                                        ❌ Retirer droits admin
+                        @if ($user->id != 1)
+                            <div class="mt-auto d-flex justify-content-between">
+                                <form action="{{ route('deleteUser', $user->id) }}" method="POST" onsubmit="return confirm('Supprimer cet utilisateur ?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" name="action" value="delete" class="btn btn-danger btn-sm btn-theme">
+                                        🗑 Supprimer
                                     </button>
-                                @else
-                                    <button type="submit" name="action" value="make_admin" class="btn btn-warning btn-sm btn-theme">
-                                        ⭐ Donner droits admin
-                                    </button>
-                                @endif
+                                </form>
+
+                                <form action="{{ route('userBecomeAdmin', $user->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
                                     
-                            </form>
-                        </div>
+                                    
+                                        
+                                    
+                                    @if ($user->hasRole('admin'))
+                                        <button type="submit" name="action" value="remove_admin" class="btn btn-danger btn-sm btn-theme">
+                                            ❌ Retirer droits admin
+                                        </button>
+                                    @else
+                                        <button type="submit" name="action" value="make_admin" class="btn btn-warning btn-sm btn-theme">
+                                            ⭐ Donner droits admin
+                                        </button>
+                                    @endif
+                                        
+                                </form>
+                            </div>
+                        @else
+                         <a> (Admin principal) </a>
+                        @endif
                     </div>
                 </div>
             </div>

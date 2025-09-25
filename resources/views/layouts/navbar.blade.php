@@ -15,10 +15,6 @@
 
     <!-- Le reste du menu aligné à droite -->
     <div class="ms-auto d-flex align-items-center">
-      <form class="d-flex me-3" role="search">
-        <input class="form-control me-2" type="search" placeholder="Rechercher" aria-label="Search" />
-        <button class="btn btn-outline-success" type="submit">Recherche</button>
-      </form>
 
       <form method="POST" action="{{ route('logout') }}">
         @csrf

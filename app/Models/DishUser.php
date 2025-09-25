@@ -15,7 +15,6 @@ class DishUser extends Model
 
     public $timestamps = false;
 
-    // cast ?
     protected $casts = [
         'user_id' => 'int',
         'dish_id' => 'int',
@@ -26,10 +25,10 @@ class DishUser extends Model
         'dish_id',
     ];
 
-    //Je viens de mettre cette relation 
-    public function dishes()
-    {
-        return $this->belongsToMany(Dish::class, 'dish_user');
-    }
+    // //Je viens de mettre cette relation 
+    // public function dishes()
+    // {
+    //     return $this->belongsToMany(Dish::class, 'dish_user');
+    // }
 
 }

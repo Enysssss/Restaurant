@@ -83,28 +83,28 @@
           <div class="col-md-6">
             <div class="p-4 bg-white shadow rounded text-center">
               <h5 class="fw-bold">Nombre de vos plats</h5>
-              <div class="display-4">{{$NB_MY_DISHES}}</div>
+              <div class="display-4">X</div>
             </div>
     </div>
 
     <div class="col-md-6">
       <div class="p-4 bg-white shadow rounded text-center">
         <h5 class="fw-bold">Nombre de plats liker</h5>
-        <div class="display-4">{{$NB_MY_LIKES}}</div>
+        <div class="display-4">X</div>
       </div>
     </div>
 
      <div class="col-md-6">
       <div class="p-4 bg-white shadow rounded text-center">
         <h5 class="fw-bold">Nombre de like sur vos plats</h5>
-        <div class="display-4">{{$allMylLikes}}</div>
+        <div class="display-4">X</div>
       </div>
       </div>
 
       <div class="col-md-6">
         <div class="p-4 bg-white shadow rounded text-center">
           <h5 class="fw-bold">Le plat du moment</h5>
-          <div class="display-4">{{$DishMoreLiked->id}} : {{$platIdMax}}</div>
+          <div class="display-4">X</div>
         </div>
       </div>
  
