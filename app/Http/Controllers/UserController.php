@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\UserMail;
 use App\Models\Dish;
 use App\Models\User;
-use App\Models\Comment;
 use App\Models\DishUser;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -77,7 +75,6 @@ class UserController extends Controller
     {
         $user = Auth::User();
         $dish = Dish::find($id);
-       // $dish->likedBy()->attach($user->id);
         DishUser::firstOrCreate([
             'user_id' => $user->id,
             'dish_id' => $dish->id,
@@ -90,8 +87,7 @@ class UserController extends Controller
     public function unlike($id)
     {
         $user = Auth::User();
-        $dish = Dish::find($id);
-        // $dish->likedByUsers()->detach($user->id);
+        $dish = Dish::findOrfail($id);
         DishUser::where('user_id', $user->id)
                 ->where('dish_id', $dish->id)
                 ->delete();
@@ -101,8 +97,11 @@ class UserController extends Controller
     public function myLikes()
     {
         $UserNow = Auth::user();
-        $user = User::find($UserNow->id);
-        $dishes = $user->likes()->get();
+        $user = User::find($UserNow->id); 
+        
+        $dishesLikedIds = $user->likes()->pluck('dish_id');
+
+        $dishes = Dish::whereIn('id', $dishesLikedIds)->get();
 
         return view('liked_dishes', compact('dishes'));
 
@@ -138,14 +137,22 @@ class UserController extends Controller
 
     public function deleteUser($id)
     {
-        $user = User::find($id); 
-        $user->dishes()->delete();
-        dd($user->likedDishes);//()->delete(); 
-        $user->comments()->delete();
-    //    $user-> delete();
-       
-  //      return back()->with('success', 'User delete');
+        $user = User::find($id);
 
+        foreach ($user->dishes as $dish) {
+            $dish->likedBy()->delete();  
+        }
+
+        foreach ($user->dishes as $dish) {
+            $dish->comments()->delete(); 
+        }
+
+        $user->dishes()->delete();
+        $user->likes()->delete();
+        $user->comments()->delete();
+        $user->delete();
+
+        return back()->with('success', 'User delete');
     }
 
     public function userBecomeAdmin($id)

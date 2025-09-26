@@ -12,36 +12,27 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $users = User::factory()->count(2)->create();
+        $users = User::factory()->count(10)->create();
 
-        $dishes = Dish::factory()->count(3)->make()->each(function ($dish) use ($users) {
+        $dishes = Dish::factory()->count(30)->make()->each(function ($dish) use ($users) {
             $dish->user_id = $users->random()->id; 
             $dish->save();
         });
 
-        Comment::factory()->count(5)->make()->each(function ($comment) use ($users, $dishes) {
+        Comment::factory()->count(20)->make()->each(function ($comment) use ($users, $dishes) {
             $comment->user_id = $users->random()->id;
             $comment->dish_id = $dishes->random()->id;
             $comment->save();
         });
 
         foreach ($users as $user) {
-        foreach ($dishes->random(rand(1,2)) as $dish) {
+        foreach ($dishes->random(rand(1,10)) as $dish) {
             DishUser::firstOrCreate([
                 'user_id' => $user->id,
                 'dish_id' => $dish->id,
             ]);
         }
     }
-        
-        // foreach ($users as $user) {
-        //     $user->like()->attach(
-        //         $dishes->random(rand(1,2))->pluck('id')->toArray()
-        //     );
-        // }
-
-        // DishUser::create(['user_id' => 1, 'dish_id' => 1]);
-
 
         $this->call([
             RolesAndPermissionsSeeder::class,

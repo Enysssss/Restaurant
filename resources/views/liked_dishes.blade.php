@@ -28,13 +28,18 @@
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 shadow-sm">
                     @if($dish->image)
-                        <img 
-                            src="{{ $dish->image }}" 
-                            class="card-img-top img-fluid"
-                            alt="Image du plat" 
-                            style="height: 250px; object-fit: cover;"
-                        >
+                        <a href="{{ route('detailDish', $dish->id) }}">
+                            <img 
+                                src="{{ \Illuminate\Support\Str::startsWith($dish->image, ['http://', 'https://']) 
+                                        ? $dish->image 
+                                        : asset('storage/' . $dish->image) }}" 
+                                class="img-fluid rounded shadow-sm"
+                                alt="Image du plat" 
+                                style="height: 250px; object-fit: cover; width: 100%;"
+                            >
+                        </a>
                     @endif
+
                     <div class="card-body">
                         <h5 class="card-title">{{ $dish->name }}</h5>
                         <p class="card-text">{{ $dish->description ?? 'Pas de description disponible.' }}</p>

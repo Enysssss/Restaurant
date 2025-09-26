@@ -28,16 +28,19 @@
         @foreach ($plats as $plat)
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 shadow-sm">
-                    <a>
-                     <img 
-                        src="{{ \Illuminate\Support\Str::startsWith($plat->image, ['http://', 'https://']) 
-                                ? $plat->image 
-                                : asset('storage/' . $plat->image) }}" 
-                        class="card-img-top img-fluid"
-                        alt="Image du plat" 
-                        style="height: 250px; object-fit: cover;"
-                    >
-                    </a>
+                    @if($plat->image)
+                        <a href="{{ route('detailDish', $plat->id) }}">
+                            <img 
+                                src="{{ \Illuminate\Support\Str::startsWith($plat->image, ['http://', 'https://']) 
+                                        ? $plat->image 
+                                        : asset('storage/' . $plat->image) }}" 
+                                class="img-fluid rounded shadow-sm mb-3"
+                                alt="Image du plat" 
+                                style="height: 250px; object-fit: cover; width: 100%;"
+                            >
+                        </a>
+                    @endif
+
                     <div class="card-body">
                         <h5 class="card-title d-flex justify-content-between align-items-center">
                             {{ $plat->name }}
@@ -56,7 +59,7 @@
                             </form>                         
                             
                         </h5>
-                        <p class="card-text">{{ $plat->descriptionXX }}</p>
+                        <p class="card-text">{{ $plat->description }}</p>
                     </div>
                 </div>
                 </div>

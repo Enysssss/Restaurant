@@ -58,13 +58,19 @@ class DishController extends Controller
         return redirect()->route('listDishes')->with('succes', 'Inscription réussie ! + Mail Send');
     }
 
-    public function destroy($id)
+    public function deleteDish($id)
     {
-        $dish = Dish::where('id', $id);
+        $dish = Dish::findOrFail($id);
+
+        $dish->comments()->delete();
+        $dish->likedBy()->delete();
+
         $dish->delete();
 
-        return back();
+        dd("caca"); 
+        return redirect()->route('listDishes')->with('success', 'Plat supprimé avec ses commentaires et likes.');
     }
+
 
     public function listUserDish()
     {
@@ -131,27 +137,11 @@ class DishController extends Controller
         foreach($dishOfMyUser as $myDish){
            $nbLikeOnMyDishes += $myDish->likedBy()->count();
         }
+     
+        $topDish = Dish::withCount('likedBy')
+            ->orderByDesc('liked_by_count')
+            ->first();
 
-
-         //$d = Dish::find(3); 
-        //dd($d->likedBy()->count()); 
-//        $NB_MY_LIKES = $user->likedDishes()->count();
-
-        // $plats = Dish::where('user_id', $user->id)->with('likedBy')->get();
-
-        // $plats2 = Dish::select('name', 'description', 'image', 'id')->paginate(9);
-
-    //     $allMylLikes = 0;
-    //     foreach ($plats2 as $plat) {
-    //         $allMylLikes += $plat->likedBy->count();
-    //         $nbLikes[$plat->id] = $plat->likedBy->count(); 
-    //     }
-        
-    //     $platIdMax = array_search(max($nbLikes), $nbLikes);
-
-    //    $data = max($nbLikes); 
-    //     $DishMoreLiked = Dish::find($platIdMax);
-
-        return view(('dashboard'), compact('NbDishes', 'NbClient', "nbMyDishes", "nbDishesIlike","nbLikeOnMyDishes"));
+        return view(('dashboard'), compact('NbDishes', 'NbClient', "nbMyDishes", "nbDishesIlike","nbLikeOnMyDishes","topDish"));
     }
 }

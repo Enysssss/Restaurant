@@ -102,13 +102,23 @@
       </div>
 
       <div class="col-md-6">
-        <div class="p-4 bg-white shadow rounded text-center">
-          <h5 class="fw-bold">Le plat du moment</h5>
-          <div class="display-4">X</div>
+        <div class="p-4 bg-white shadow rounded text-center h-100 d-flex flex-column justify-content-between">
+          <h5 class="fw-bold">🥇 Le plat du moment :  {{ $topDish->name }}</h5>
+
+          <a href="{{ route('detailDish', $topDish->id) }}">
+            <img 
+                src="{{ \Illuminate\Support\Str::startsWith($topDish->image, ['http://', 'https://']) 
+                        ? $topDish->image 
+                        : asset('storage/' . $topDish->image) }}" 
+                class="img-fluid rounded shadow-sm my-3"
+                alt="Image du plat du moment" 
+                style="max-height: 220px; object-fit: cover; width: 100%;"
+            >
+          </a>
         </div>
       </div>
- 
-</div>
+    
+  </div>
 
   </div>
 </div>

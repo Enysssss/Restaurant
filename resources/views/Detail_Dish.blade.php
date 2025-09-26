@@ -45,7 +45,7 @@
         <!-- Infos du plat -->
         <div class="col-md-6">
             <h1 class="mb-3">{{ $plat->name }}</h1>
-            <p class="lead text-muted">{{ $plat->descriptionXX }}</p>
+            <p class="lead text-muted">{{ $plat->description }}</p>
 
             <div class="mt-4 d-grid gap-2">
                 <a href="{{ route('listDishes') }}" class="btn btn-secondary action-btn">
@@ -69,6 +69,7 @@
                 </form>
                 @endcan
                 
+                <a>{{$plat->likedBy()->count()}}</a>
             </div>
         </div>
     </div>

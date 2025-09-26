@@ -31,7 +31,7 @@ Route::get('listDishes', [DishController::class, 'listDishes'])->middleware(Chec
 Route::get('listUserDish', [DishController::class, 'listUserDish'])->middleware(CheckIfNotConnected::class)->name('listUserDish');
 
 // Delete Dish
-Route::delete('deleteDish/{id}', [DishController::class, 'destroy'])->middleware(CheckIfNotConnected::class)->name('deleteDish');
+Route::delete('deleteDish/{id}', [DishController::class, 'deleteDish'])->middleware(CheckIfNotConnected::class)->name('deleteDish');
 
 // Edit Dish
 Route::get('/editDish/{id}', [UserController::class, 'editDish'])->middleware(CheckIfNotConnected::class)->name('editDish');
