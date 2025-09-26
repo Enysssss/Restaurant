@@ -6,6 +6,8 @@ use App\Mail\UserMail;
 use App\Models\Dish;
 use App\Models\User;
 use App\Models\Comment;
+use App\Models\DishUser;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -75,7 +77,12 @@ class UserController extends Controller
     {
         $user = Auth::User();
         $dish = Dish::find($id);
-        $dish->likedByUsers()->attach($user->id);
+       // $dish->likedBy()->attach($user->id);
+        DishUser::firstOrCreate([
+            'user_id' => $user->id,
+            'dish_id' => $dish->id,
+        ]);
+
 
         return back();
     }
@@ -84,8 +91,10 @@ class UserController extends Controller
     {
         $user = Auth::User();
         $dish = Dish::find($id);
-        $dish->likedByUsers()->detach($user->id);
-
+        // $dish->likedByUsers()->detach($user->id);
+        DishUser::where('user_id', $user->id)
+                ->where('dish_id', $dish->id)
+                ->delete();
         return back();
     }
 
@@ -93,7 +102,7 @@ class UserController extends Controller
     {
         $UserNow = Auth::user();
         $user = User::find($UserNow->id);
-        $dishes = $user->likedDishes()->get();
+        $dishes = $user->likes()->get();
 
         return view('liked_dishes', compact('dishes'));
 

@@ -25,13 +25,13 @@ class DishController extends Controller
         $user = User::find($UserNow->id);
 
         $plats = Dish::select('name', 'description', 'image', 'id')->paginate(9);
-        $Dish_Liked = $user->likedDishes()->pluck('dishes.id')->toArray();
+        $Dish_Liked = $user->likes()->pluck('dish_id')->toArray();
         
         $nbLikes = [];
         $platsLiked = []; 
         foreach ($plats as $plat) {
             $platsLiked[$plat->id] = in_array($plat->id, $Dish_Liked);
-            $nbLikes[$plat->id] = $plat->likedByUsers->count(); 
+            $nbLikes[$plat->id] = $plat->likedBy->count(); 
         }
 
         return view('list_dishes', compact('plats', 'platsLiked','nbLikes'));
@@ -121,25 +121,37 @@ class DishController extends Controller
             return back()->withErrors('error', 'you need to be conected to got the acces');
         }
         
-        $NB_MY_DISHES = $user->dishes()->count();
+        $nbMyDishes = Dish::where('user_id', $user->id)->count(); 
 
+        $nbDishesIlike = $user->likes()->count(); 
+
+        $dishOfMyUser = Dish::where('user_id', $user->id)->get(); 
+        $nbLikeOnMyDishes = 0;
+        
+        foreach($dishOfMyUser as $myDish){
+           $nbLikeOnMyDishes += $myDish->likedBy()->count();
+        }
+
+
+         //$d = Dish::find(3); 
+        //dd($d->likedBy()->count()); 
 //        $NB_MY_LIKES = $user->likedDishes()->count();
 
-        $plats = Dish::where('user_id', $user->id)->with('likedByUsers')->get();
+        // $plats = Dish::where('user_id', $user->id)->with('likedBy')->get();
 
-        $plats2 = Dish::select('name', 'description', 'image', 'id')->paginate(9);
+        // $plats2 = Dish::select('name', 'description', 'image', 'id')->paginate(9);
 
-        $allMylLikes = 0;
-        foreach ($plats2 as $plat) {
-            $allMylLikes += $plat->likedByUsers->count();
-            $nbLikes[$plat->id] = $plat->likedByUsers->count(); 
-        }
+    //     $allMylLikes = 0;
+    //     foreach ($plats2 as $plat) {
+    //         $allMylLikes += $plat->likedBy->count();
+    //         $nbLikes[$plat->id] = $plat->likedBy->count(); 
+    //     }
         
-        $platIdMax = array_search(max($nbLikes), $nbLikes);
+    //     $platIdMax = array_search(max($nbLikes), $nbLikes);
 
-       $data = max($nbLikes); 
-        $DishMoreLiked = Dish::find($platIdMax);
+    //    $data = max($nbLikes); 
+    //     $DishMoreLiked = Dish::find($platIdMax);
 
-        return view(('dashboard'), compact('NbDishes', 'NbClient', "NB_MY_DISHES", 'allMylLikes', 'DishMoreLiked','platIdMax','data'));
+        return view(('dashboard'), compact('NbDishes', 'NbClient', "nbMyDishes", "nbDishesIlike","nbLikeOnMyDishes"));
     }
 }

@@ -32,9 +32,9 @@ class Dish extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function likedByUsers()
+    public function likedBy()
     {
-        return $this->belongsToMany(User::class);
+        return $this->hasMany(DishUser::class,'dish_id');
     }
 
 }

@@ -25,12 +25,22 @@ class DatabaseSeeder extends Seeder
             $comment->save();
         });
 
+        foreach ($users as $user) {
+        foreach ($dishes->random(rand(1,2)) as $dish) {
+            DishUser::firstOrCreate([
+                'user_id' => $user->id,
+                'dish_id' => $dish->id,
+            ]);
+        }
+    }
+        
         // foreach ($users as $user) {
-        //     $user->likedDishes()->attach(
+        //     $user->like()->attach(
         //         $dishes->random(rand(1,2))->pluck('id')->toArray()
         //     );
         // }
-        DishUser::create(['user_id' => 1, 'dish_id' => 1]);
+
+        // DishUser::create(['user_id' => 1, 'dish_id' => 1]);
 
 
         $this->call([
