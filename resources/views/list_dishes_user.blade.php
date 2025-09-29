@@ -30,11 +30,14 @@
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 shadow-sm">
                     <img 
-                        src="{{ $plat->image }}" 
-                        class="card-img-top img-fluid"
+                        src="{{ \Illuminate\Support\Str::startsWith($plat->image, ['http://', 'https://']) 
+                                ? $plat->image 
+                                : asset('storage/' . $plat->image) }}" 
+                        class="img-fluid rounded shadow-sm"
                         alt="Image du plat" 
-                        style="height: 250px; object-fit: cover;"
+                        style="height: 250px; object-fit: cover; width: 100%;"
                     >
+
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ $plat->name }}</h5>
                         <p class="card-text">{{ $plat->descriptionXX }}</p>
