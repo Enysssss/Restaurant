@@ -35,9 +35,9 @@
     <div class="row align-items-center">
         <!-- Image du plat -->
         <div class="col-md-6 mb-4 mb-md-0">
-            <img 
-                src="{{ $plat->image }}" 
-                alt="Image du plat {{ $plat->name }}" 
+            <img
+                src="{{ $plat->image }}"
+                alt="Image du plat {{ $plat->name }}"
                 class="img-fluid shadow dish-image"
             >
         </div>
@@ -56,10 +56,9 @@
                     ✏️ Modifier
                 </a>
                 @endif
-                
                 @can('Edit Dish')
-                    <form action="{{ route('deleteDish', $plat->id) }}" method="POST" 
-                      class="d-inline" 
+                    <form action="{{ route('deleteDish', $plat->id) }}" method="POST"
+                      class="d-inline"
                       onsubmit="return confirm('Supprimer ce plat ?')">
                     @csrf
                     @method('DELETE')
@@ -68,7 +67,6 @@
                     </button>
                 </form>
                 @endcan
-                
                 <a>{{$plat->likedBy()->count()}}</a>
             </div>
         </div>

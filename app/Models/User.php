@@ -65,9 +65,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(DishUser::class, 'user_id');
     }
-
-    // public function likedDishes()
-    // {
-    //     return $this->hasManyThrough(Dish::class, DishUser::class, 'user_id', 'id', 'id', 'dish_id');
-    // }
 }

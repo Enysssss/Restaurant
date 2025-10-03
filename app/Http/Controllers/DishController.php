@@ -26,12 +26,12 @@ class DishController extends Controller
 
         $plats = Dish::select('name', 'description', 'image', 'id')->paginate(9);
         $Dish_Liked = $user->likes()->pluck('dish_id')->toArray();
-        
+
         $nbLikes = [];
-        $platsLiked = []; 
+        $platsLiked = [];
         foreach ($plats as $plat) {
             $platsLiked[$plat->id] = in_array($plat->id, $Dish_Liked);
-            $nbLikes[$plat->id] = $plat->likedBy->count(); 
+            $nbLikes[$plat->id] = $plat->likedBy->count();
         }
 
         return view('list_dishes', compact('plats', 'platsLiked','nbLikes'));
@@ -50,7 +50,7 @@ class DishController extends Controller
             $imagePath = $request->file('image')->store('uploads', 'public');
             $dish->image = $imagePath;
         }
-        
+
         $dish->user_id = $user->id;
         $dish->save();
         Mail::to($user->email)->send(new DishMail($user));
@@ -67,7 +67,6 @@ class DishController extends Controller
 
         $dish->delete();
 
-        dd("caca"); 
         return redirect()->route('listDishes')->with('success', 'Plat supprimé avec ses commentaires et likes.');
     }
 
@@ -109,35 +108,28 @@ class DishController extends Controller
     }
 
     public function deleteComment($id){
-        $comment = Comment::where('id', $id); 
-        $comment->delete(); 
-        return back(); 
+        $comment = Comment::where('id', $id);
+        $comment->delete();
+        return back();
     }
 
     public function dashboard()
-    { 
-        $user = Auth::user(); 
+    {
+        $user = Auth::user();
         $NbDishes = Dish::count();
         $NbClient = User::count();
-        $userCO = Auth::user();
-        
-        if($userCO != null){
-            $user = User::find($userCO->id);
-        }else{
-            return back()->withErrors('error', 'you need to be conected to got the acces');
-        }
-        
-        $nbMyDishes = Dish::where('user_id', $user->id)->count(); 
 
-        $nbDishesIlike = $user->likes()->count(); 
+        $nbMyDishes = Dish::where('user_id', $user->id)->count();
 
-        $dishOfMyUser = Dish::where('user_id', $user->id)->get(); 
+        $nbDishesIlike = $user->likes()->count();
+
+        $dishOfMyUser = Dish::where('user_id', $user->id)->get();
         $nbLikeOnMyDishes = 0;
-        
+
         foreach($dishOfMyUser as $myDish){
            $nbLikeOnMyDishes += $myDish->likedBy()->count();
         }
-     
+
         $topDish = Dish::withCount('likedBy')
             ->orderByDesc('liked_by_count')
             ->first();
